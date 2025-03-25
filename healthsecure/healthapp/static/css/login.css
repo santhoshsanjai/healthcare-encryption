@@ -1,0 +1,62 @@
+body {
+    background-color: #e6f0ff;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+.main-container{
+    border: 2px solid #007BFF;   
+    border-radius: 5px;
+    display:flex
+}
+.login-container {
+    background-color: #5279f5;
+    border-right: 2px solid #007BFF;
+    padding: 30px;
+    /* border-radius: 10px; */
+    box-shadow: 0 4px 8px rgba(0, 0, 255, 0.1);
+    width: 300px;
+    text-align: center;
+}
+.login-img{
+    img {
+        width: 400px;
+        height: 400px;
+    }
+
+}
+.login-container h2 {
+    color: #ffffff;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 22px;
+}
+/* label{
+    display: none;
+} */
+button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}

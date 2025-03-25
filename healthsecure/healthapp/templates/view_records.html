@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Patient Records</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --text-color: #374151;
+            --border-color: #e5e7eb;
+            --background-color: #f3f4f6;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(-45deg, #eef2ff, #e0e7ff, #dbeafe, #ede9fe);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-color);
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            position: relative;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .logo::before {
+            content: "+";
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--white);
+            font-size: 65px;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-height: 400px;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .patient-table {
+            min-width: 1000px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .patient-table th,
+        .patient-table td {
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .patient-table th {
+            background-color: #f9fafb;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .patient-table td button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .patient-table td a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .patient-table td a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-logout,
+        .btn-add {
+            margin-top: 1.5rem;
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: background 0.3s;
+        }
+
+        .btn-logout {
+            background-color: var(--white);
+            color: var(--text-color);
+        }
+
+        .btn-logout:hover {
+            background-color: var(--background-color);
+        }
+
+        .btn-add {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: 1px solid var(--primary-color);
+            margin-left: 10px;
+        }
+
+        .btn-add:hover {
+            background-color: var(--primary-hover);
+        }
+
+        @media (max-width: 768px) {
+
+            .patient-table th,
+            .patient-table td {
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo"></div>
+            <h2>Patient Records</h2>
+            <p class="subtitle">All stored and encrypted patient records are shown here</p>
+        </div>
+
+        <div class="table-container">
+            <table class="patient-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Diagnosis</th>
+                        <th>Sensitive Data</th>
+                        <th>Health Data</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                    <tr>
+                        <td>{{ patient.name }}</td>
+                        <td>{{ patient.age }}</td>
+                        <td>{{ patient.diagnosis }}</td>
+                        <td>{{ patient.sensitive_data }}</td>
+                        <td>
+                            {% if patient.sensitive_data %}
+                            <a href="{% url 'decrypt_patient_data' patient.id %}">🔓 View</a>
+                            {% else %}
+                            No Sensitive Info
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'delete_patient' patient.id %}"
+                                onclick="return confirm('Are you sure you want to delete this record?')"
+                                style="color:red">🗑 Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" style="text-align:center;">No records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div style="display: flex;gap:10px">
+            <a href="{% url 'add_record' %}" class="btn-add">➕ Add Patient</a>
+            <form method="POST" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-logout" style="padding: 15px;">Logout</button>
+            </form>
+
+        </div>
+    </div>
+
+    <script>
+        function decryptData(patientId, buttonElement) {
+            fetch(`/decrypt/${patientId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.health_data) {
+                        const td = buttonElement.parentElement;
+                        td.textContent = data.health_data;
+                    } else {
+                        alert("Failed to decrypt data.");
+                    }
+                })
+                .catch(err => {
+                    alert("Error fetching decrypted data.");
+                    console.error(err);
+                });
+        }
+    </script>
+  {% if messages %}
+  {% for message in messages %}
+  {% if message.tags == "error" %}
+
+  <script>
+              alert("{{ message|escapejs }}");
+          
+  </script>
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+</body>
+
+</html>
