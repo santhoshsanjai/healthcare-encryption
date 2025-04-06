@@ -32,12 +32,20 @@ def classify_data(data):
 @csrf_exempt
 def login_view(request):
     # admin_user = {
+    # "username": "user",
+    # "password": make_password("user123"),  # Hashing the password for security
+    # "role": "user"
+    # }
+
+
+    # users_collection.insert_one(admin_user)
+    # admin_user = {
     # "username": "admin",
     # "password": make_password("admin123"),  # Hashing the password for security
     # "role": "admin"
     # }
 
-# Insert the admin user into the database
+
     # users_collection.insert_one(admin_user)
     if request.method == "POST":
         username = request.POST.get("username")
